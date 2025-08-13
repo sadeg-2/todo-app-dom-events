@@ -7,8 +7,42 @@
     <title>To Do App</title>
   </head>
   <body>
-    <h1>Welcome in My To Do App</h1>
+    <h1>Welcome in My To-Do App List</h1>
 
+    <div class="head-app">
+      <input id="inTask" type="text" placeholder="Enter the task" />
+      <button onclick="alert()">add Task</button>
+    </div>
+    <div class="content-app">
+      <ul class="list-task">
+        <li class="head-list"><p>My Tasks</p></li>
+        <li>
+          <p>Task</p>
+          <p>Completed</p>
+          <p>Action</p>
+        </li>
+        <li class="task deleted">
+          <p>this is a first Task</p>
+          <input type="checkbox" onchange="confirm('TT');" />
+          <input
+            class="recover"
+            type="button"
+            value="Recover"
+            onclick="alert('Recover')"
+          />
+        </li>
+        <li class="task complete">
+          <p>this is a first Task</p>
+          <input type="checkbox" onchange="confirm('TT');" />
+          <input
+            class="remove"
+            type="button"
+            value="Delete"
+            onclick="alert('Delete')"
+          />
+        </li>
+      </ul>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>

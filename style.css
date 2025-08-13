@@ -1,3 +1,138 @@
-h1{
-    color: red;
+/* Reset some default browser styles */
+body {
+  margin: 20px;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #74b9ff, #a29bfe);
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  min-height: 100vh;
+}
+
+/* Main container */
+.head-app, .content-app {
+  width: 600px;
+  background: #d2f2f3;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+/* App heading */
+h1 {
+  text-align: center;
+  color: #445155;
+  margin-bottom: 20px;
+}
+
+/* Input and Add Task button */
+.head-app {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.head-app #inTask{
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #bdcdd4;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.head-app button {
+  background: #dfe2b2;
+  color: #777070;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.head-app button:hover {
+  background: #74b9ff;
+  color: #925f5f;
+}
+
+/* Task list container */
+.list-task {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.head-list {
+  font-weight: bold;
+  background: #dfe6e9;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #9c9393;
+  text-align: center;
+} 
+
+/* Task item */
+.list-task li {
+  display: flex;
+  align-items: center;
+  background: #f9f9f9;
+  padding: 8px 10px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: 1px solid #ececec;
+} 
+
+.list-task li p {
+  flex: 1;
+  margin: 0;
+  padding-right: 10px;
+  width: 40%;
+}
+
+/* Delete button */
+.remove {
+  background: #d63031;
+  color: white;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+  width: 40%;
+}
+/* Recover button */
+.recover {
+  background: #f1e8e8;
+  color: #444;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+  width: 40%;
+}
+
+.task input[type="button"]:hover {
+  background: #ff7675;
+} 
+
+.task input[type="checkbox"]{
+    width: 20%;
+}
+.task{
+    color: #5f5858;
+    font-family: system-ui;
+    font-weight: bold;
+}
+
+.task.deleted {
+  background-color: #c59696;
+  color: #e0e0e0;
+  text-decoration: line-through;
+}
+.complete{
+    outline: double 1px red;
+    text-decoration: underline;
 }
