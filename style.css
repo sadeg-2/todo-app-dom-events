@@ -130,9 +130,23 @@ h1 {
 .task.deleted {
   background-color: #c59696;
   color: #e0e0e0;
-  text-decoration: line-through;
+  text-decoration: underline;
 }
-.complete{
+.task.complete{
     outline: double 1px red;
-    text-decoration: underline;
+    text-decoration: line-through;
+    background-color: grey;
+    color: wheat;
+}
+#alert {
+  background: #e0e0c6;
+  width: 600px;
+  padding: 20px;
+  border-radius: 8px;
+  color: #8f7777;
+  font-family: 'Gill Sans';
+  font-size: 20px;
+  font-weight: bold;
+  font-style: italic;
+  display: none;
 }
