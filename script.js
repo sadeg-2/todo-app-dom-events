@@ -18,12 +18,14 @@ const tasks = [
 ];
 
 // to show notify if the add operation successfull or not
-let notifyTimeoutId ;
+let notifyTimeoutId;
 function notify(message) {
   const node = document.getElementById("alert");
+
   node.textContent = message;
   node.style.display = "block";
-  setTimeout(() => {
+  clearTimeout(notifyTimeoutId);
+  notifyTimeoutId = setTimeout(() => {
     node.style.display = "none";
   }, 4000);
 }
@@ -86,6 +88,7 @@ inputTask.addEventListener("keydown", function (event) {
   }
 });
 
+// here main logic to delete task and complete task
 listTasks.addEventListener("click", function (event) {
   const actionElement = event.target;
   if (actionElement.type == "button" && actionElement.value == "Delete") {
@@ -93,16 +96,5 @@ listTasks.addEventListener("click", function (event) {
   } else if (actionElement.type == "checkbox") {
     // after some search i found the toggle function that help me to be more good
     actionElement.parentElement.classList.toggle("complete");
-    // here my logic
-    // const isChecked = actionElement.checked;
-    // if (isChecked) {
-    //   actionElement.parentElement.classList.add("complete");
-    // } else {
-    //   actionElement.parentElement.classList.remove("complete");
-    // }
   }
-
-  console.log(event.target);
-
-  console.log(actionElement.parentElement);
 });
