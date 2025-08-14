@@ -18,13 +18,14 @@ const tasks = [
 ];
 
 // to show notify if the add operation successfull or not
+let notifyTimeoutId ;
 function notify(message) {
   const node = document.getElementById("alert");
   node.textContent = message;
   node.style.display = "block";
   setTimeout(() => {
     node.style.display = "none";
-  }, 4000); // show every second
+  }, 4000);
 }
 
 // to creation the element based object
@@ -78,4 +79,30 @@ addTask.addEventListener("click", function (event) {
   }
 });
 
+//Keyboard events (Enter key for adding)
+inputTask.addEventListener("keydown", function (event) {
+  if (event.key == "Enter") {
+    addTask.click();
+  }
+});
 
+listTasks.addEventListener("click", function (event) {
+  const actionElement = event.target;
+  if (actionElement.type == "button" && actionElement.value == "Delete") {
+    actionElement.parentElement.remove();
+  } else if (actionElement.type == "checkbox") {
+    // after some search i found the toggle function that help me to be more good
+    actionElement.parentElement.classList.toggle("complete");
+    // here my logic
+    // const isChecked = actionElement.checked;
+    // if (isChecked) {
+    //   actionElement.parentElement.classList.add("complete");
+    // } else {
+    //   actionElement.parentElement.classList.remove("complete");
+    // }
+  }
+
+  console.log(event.target);
+
+  console.log(actionElement.parentElement);
+});

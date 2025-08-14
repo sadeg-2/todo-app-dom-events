@@ -120,6 +120,10 @@ h1 {
 
 .task input[type="checkbox"]{
     width: 20%;
+    transition: 0.3s;
+}
+.task input[type="checkbox"]:hover {
+  accent-color: red;           /* Changes the checkmark color in modern browsers */
 }
 .task{
     color: #5f5858;
