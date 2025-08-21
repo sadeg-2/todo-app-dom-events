@@ -2,7 +2,7 @@ const listTasks = document.querySelector(".list-task");
 const addTask = document.getElementById("addTask");
 const inputTask = document.getElementById("inTask");
 
-// to show notify if the add operation successfull or not
+// i test if i can show notify if the add operation successfull or not
 let notifyTimeoutId;
 function notify(message) {
   const node = document.getElementById("alert");
@@ -13,6 +13,7 @@ function notify(message) {
     node.style.display = "none";
   }, 4000);
 }
+
 function clearInputs() {
   inputTask.value = "";
 }
@@ -21,15 +22,27 @@ function getInputs() {
 }
 // here i find that if we use an call back, that give me flixibility to can add or remove or set completed
 function updateStorage(callBack) {
-  const storedTask = localStorage.getItem("tasks");
-  const parsedTask = JSON.parse(storedTask) || [];
+  const parsedTask = getDataFromStore();
+
   modifiedTask = callBack(parsedTask);
+
   const stringifyTask = JSON.stringify(modifiedTask);
   localStorage.setItem("tasks", stringifyTask);
 }
-function uploadStoreTask() {
+
+function getDataFromStore() {
   const storedTask = localStorage.getItem("tasks");
-  const parsedTask = JSON.parse(storedTask) || [];
+  let parsedTask = JSON.parse(storedTask) || [];
+  // here i found an small bug that if i change the local storage to numeric value in the browser make bug
+  if (!parsedTask.length) {
+    parsedTask = [];
+    localStorage.setItem("tasks", JSON.stringify(parsedTask));
+  }
+  return parsedTask;
+}
+
+function uploadStoreTask() {
+  const parsedTask = getDataFromStore();
   const nodes = parsedTask.map((task) => {
     return creatTaskElement(task);
   });
@@ -41,7 +54,7 @@ function creatTaskElement(element) {
   const task = document.createElement("li");
   task.classList.add("task");
   task.id = element.id;
-  
+
   if (element.completed) task.classList.add("complete");
 
   const content = document.createElement("p");
@@ -62,6 +75,47 @@ function creatTaskElement(element) {
 
   return task;
 }
+function markTask(actionElement) {
+  let markedTask = null;
+  const id = actionElement.dataset.id;
+  try {
+    updateStorage(function setCompleted(parsedTask) {
+      return parsedTask.map((item) => {
+        if (item.id === Number(id)) {
+          item.completed = actionElement.checked;
+          markedTask = item;
+        }
+        return item;
+      });
+    });
+  } catch (error) {
+    return false;
+  }
+  if (markedTask) {
+    // after some search i found the toggle function that help me to be more good
+    actionElement.parentElement.classList.toggle("complete");
+  }
+  return markedTask;
+}
+function removeTask(actionElement) {
+  const id = actionElement.dataset.id;
+  let removedTask = null;
+  try {
+    updateStorage(function removeTask(parsedTask) {
+      const result = parsedTask.filter((item) => {
+        return item.id !== Number(id);
+      });
+      removedTask = parsedTask.find((item) => item.id === Number(id));
+      return result;
+    });
+  } catch (error) {
+    return false;
+  }
+
+  if (removedTask) actionElement.parentElement.remove();
+
+  return removedTask;
+}
 
 // here buisness logic to add button action
 addTask.addEventListener("click", function (event) {
@@ -70,17 +124,16 @@ addTask.addEventListener("click", function (event) {
     alert("you should enter task first");
   } else {
     const element = creatTaskElement(task);
-  
-    listTasks.appendChild(element);
-  
-    clearInputs();
-  
-    notify(`Task name : ${element.text} was added successfully`);
-  
+
     updateStorage(function addTask(parsedTask) {
       parsedTask.push(task);
       return parsedTask;
     });
+
+    listTasks.appendChild(element);
+    clearInputs();
+
+    notify(`Task name : ${task.text} was added successfully`);
   }
 });
 
@@ -95,30 +148,23 @@ inputTask.addEventListener("keydown", function (event) {
 listTasks.addEventListener("click", function (event) {
   const actionElement = event.target;
   if (actionElement.type == "button" && actionElement.value == "Delete") {
-    const id = actionElement.dataset.id;
-    updateStorage(function removeTask(parsedTask) {
-      return parsedTask.filter((item) => {
-        return item.id !== Number(id);
-      });
-    });
-    actionElement.parentElement.remove();
-    notify(`Task name : ${element.text} was removed successfully`);
+    const result = removeTask(actionElement);
+    if (result) {
+      notify(`Task name : ${result.text} was removed successfully`);
+    } else {
+      notify(`Removed operation Failed try again or reload the page`);
+    }
   } else if (actionElement.type == "checkbox") {
-    const id = actionElement.dataset.id;
-    // after some search i found the toggle function that help me to be more good
-    actionElement.parentElement.classList.toggle("complete");
-    updateStorage(function setCompleted(parsedTask) {
-      return parsedTask.map((item) => {
-        if (item.id === Number(id)) item.completed = actionElement.checked;
-        return item;
-      });
-    });
-    notify(`Task name : ${element.text} was Mark successfully`);
+    const result = markTask(actionElement);
+
+    if (result) {
+      notify(`Task name : ${result.text} was Mark successfully`);
+    } else {
+      notify(`Mark operation Failed try again or reload the page`);
+    }
   }
 });
 
 document.addEventListener("DOMContentLoaded", (e) => {
   uploadStoreTask();
 });
-
-
