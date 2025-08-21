@@ -4,6 +4,11 @@ const inputTask = document.getElementById("inTask");
 
 // i test if i can show notify if the add operation successfull or not
 let notifyTimeoutId;
+
+/**
+ * @param  message
+ * show an alert in the dom contain the message for 4 seconds
+ */
 function notify(message) {
   const node = document.getElementById("alert");
   node.textContent = message;
@@ -22,6 +27,7 @@ function getInputs() {
 }
 // here i find that if we use an call back, that give me flixibility to can add or remove or set completed
 function updateStorage(callBack) {
+  
   const parsedTask = getDataFromStore();
 
   modifiedTask = callBack(parsedTask);
@@ -32,7 +38,14 @@ function updateStorage(callBack) {
 
 function getDataFromStore() {
   const storedTask = localStorage.getItem("tasks");
-  let parsedTask = JSON.parse(storedTask) || [];
+  let parsedTask = [];
+  try {
+    parsedTask = JSON.parse(storedTask) || [];
+  } catch (error) {
+    localStorage.setItem("tasks", JSON.stringify(parsedTask));
+    notify(`Failed Get Data try reload the page`);
+    return;
+  }
   // here i found an small bug that if i change the local storage to numeric value in the browser make bug
   if (!parsedTask.length) {
     parsedTask = [];
@@ -48,8 +61,10 @@ function uploadStoreTask() {
   });
   listTasks.append(...nodes);
 }
-
-// to creation the element based object
+/**
+ * @param {*} element represent the task content {id,text,completed}
+ * @returns nodes ready to add in the dom represent the task as a list item
+ */
 function creatTaskElement(element) {
   const task = document.createElement("li");
   task.classList.add("task");
@@ -75,6 +90,10 @@ function creatTaskElement(element) {
 
   return task;
 }
+/**
+ * @param {*} actionElement => element that initiate the event that represent the checkbox
+ * @returns if the operation completed successfully or not
+ */
 function markTask(actionElement) {
   let markedTask = null;
   const id = actionElement.dataset.id;
@@ -97,6 +116,11 @@ function markTask(actionElement) {
   }
   return markedTask;
 }
+/**
+ * 
+ * @param {*} actionElement element that initiate the event that represent the delete button
+ * @returns if the operation completed successfully or not
+ */
 function removeTask(actionElement) {
   const id = actionElement.dataset.id;
   let removedTask = null;
@@ -116,7 +140,9 @@ function removeTask(actionElement) {
 
   return removedTask;
 }
-
+/*
+  Event Part in the code
+*/
 // here buisness logic to add button action
 addTask.addEventListener("click", function (event) {
   const task = { ...getInputs(), id: Math.random() };
@@ -136,14 +162,12 @@ addTask.addEventListener("click", function (event) {
     notify(`Task name : ${task.text} was added successfully`);
   }
 });
-
 //Keyboard events (Enter key for adding)
 inputTask.addEventListener("keydown", function (event) {
   if (event.key == "Enter") {
     addTask.click();
   }
 });
-
 // here main logic to delete task and complete task
 listTasks.addEventListener("click", function (event) {
   const actionElement = event.target;
@@ -164,7 +188,7 @@ listTasks.addEventListener("click", function (event) {
     }
   }
 });
-
+// load locally Data
 document.addEventListener("DOMContentLoaded", (e) => {
   uploadStoreTask();
 });
