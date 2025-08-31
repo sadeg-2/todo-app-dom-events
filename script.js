@@ -27,7 +27,6 @@ function getInputs() {
 }
 // here i find that if we use an call back, that give me flixibility to can add or remove or set completed
 function updateStorage(callBack) {
-  
   const parsedTask = getDataFromStore();
 
   modifiedTask = callBack(parsedTask);
@@ -117,7 +116,7 @@ function markTask(actionElement) {
   return markedTask;
 }
 /**
- * 
+ *
  * @param {*} actionElement element that initiate the event that represent the delete button
  * @returns if the operation completed successfully or not
  */
@@ -125,7 +124,7 @@ function removeTask(actionElement) {
   const id = actionElement.dataset.id;
   let removedTask = null;
   try {
-    updateStorage(function removeTask(parsedTask) {
+    updateStorage(function (parsedTask) {
       const result = parsedTask.filter((item) => {
         return item.id !== Number(id);
       });
@@ -165,7 +164,9 @@ addTask.addEventListener("click", function (event) {
 //Keyboard events (Enter key for adding)
 inputTask.addEventListener("keydown", function (event) {
   if (event.key == "Enter") {
-    addTask.click();
+    if (inputTask.value.trim() != "") {
+      addTask.click();
+    } else notify("there is no input");
   }
 });
 // here main logic to delete task and complete task
